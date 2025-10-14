@@ -1,0 +1,59 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title mb-4">
+                    <i class="fas fa-edit"></i> Edit Item
+                </h2>
+
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Item Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="{{ item.name }}" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Category</label>
+                        <select class="form-select" id="category" name="category" required>
+                            <option value="Clothing" {% if item.category == 'Clothing' %}selected{% endif %}>Clothing</option>
+                            <option value="Hats" {% if item.category == 'Hats' %}selected{% endif %}>Hats</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Price</label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input type="number" class="form-control" id="price" name="price" step="0.01" value="{{ item.price }}" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="4" required>{{ item.description }}</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Item Image</label>
+                        {% if item.image_url %}
+                        <div class="mb-2">
+                            <img src="{{ url_for('static', filename=item.image_url) }}" alt="{{ item.name }}" style="max-height: 200px;">
+                        </div>
+                        {% endif %}
+                        <input type="file" class="form-control" id="image" name="image" accept="image/*">
+                        <div class="form-text">Leave empty to keep the current image. Allowed formats: PNG, JPG, JPEG, GIF</div>
+                    </div>
+
+                    <div class="text-end">
+                        <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Update Item</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

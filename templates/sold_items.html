@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Sold Items</h2>
+<div class="row">
+  {% for item in items %}
+  <div class="col-md-4">
+    <div class="card mb-4 shadow-sm border-success">
+      <img src="{{ item.image_url }}" class="card-img-top" alt="{{ item.name }}">
+      <div class="card-body">
+        <h5 class="card-title">{{ item.name }}</h5>
+        <p class="card-text">{{ item.category }} - Sold for ${{ item.price }}</p>
+        <p>{{ item.description }}</p>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

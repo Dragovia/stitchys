@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="section-title text-center mb-4">Vintage Hats Collection</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for item in items %}
+        <div class="col mb-4">
+            <div class="card item-card h-100">
+                {% if item.image_url %}
+                <img src="{{ url_for('static', filename=item.image_url) }}" class="card-img-top item-image" alt="{{ item.name }}">
+                {% else %}
+                <div class="placeholder-image">
+                    <i class="fas fa-hat-cowboy"></i>
+                </div>
+                {% endif %}
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ item.name }}</h5>
+                    <p class="card-text description">{{ item.description }}</p>
+                    <div class="item-details mt-auto">
+                        <p class="category-badge">{{ item.category }}</p>
+                        <p class="price">${{ "%.2f"|format(item.price) }}</p>
+                        {% if item.condition %}
+                        <div class="condition-badge">{{ item.condition }}</div>
+                        {% endif %}
+                        <form method="POST" action="{{ url_for('add_to_cart', item_id=item.id) }}" class="mt-2">
+                            <button type="submit" class="btn btn-primary w-100">Add to Cart</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="section-title text-center mb-4">Shopping Cart</h2>
+    
+    {% if cart_items %}
+    <div class="row">
+        <div class="col-md-8">
+            {% for cart_item in cart_items %}
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        {% if cart_item.item.image_url %}
+                        <img src="{{ url_for('static', filename=cart_item.item.image_url) }}" class="img-fluid rounded-start" alt="{{ cart_item.item.name }}">
+                        {% else %}
+                        <div class="placeholder-image">
+                            {% if cart_item.item.category == 'Hats' %}
+                            <i class="fas fa-hat-cowboy"></i>
+                            {% else %}
+                            <i class="fas fa-tshirt"></i>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ cart_item.item.name }}</h5>
+                            <p class="card-text">
+                                <small class="text-muted">{{ cart_item.item.category }}</small>
+                            </p>
+                            <p class="price">${{ "%.2f"|format(cart_item.item.price) }}</p>
+                            <div class="d-flex align-items-center">
+                                <form method="POST" action="{{ url_for('update_cart_item', item_id=cart_item.item.id) }}" class="d-flex align-items-center me-3">
+                                    <input type="number" name="quantity" value="{{ cart_item.quantity }}" min="1" max="10" class="form-control me-2" style="width: 80px;">
+                                    <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                                </form>
+                                <form method="POST" action="{{ url_for('remove_from_cart', item_id=cart_item.item.id) }}" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Cart Summary</h5>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Subtotal:</span>
+                        <span>${{ "%.2f"|format(total) }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-3">
+                        <span>Total Items:</span>
+                        <span>{{ total_items }}</span>
+                    </div>
+                    <button class="btn btn-primary w-100">Proceed to Checkout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="text-center">
+        <i class="fas fa-shopping-cart fa-3x mb-3 text-muted"></i>
+        <h3>Your cart is empty</h3>
+        <p>Browse our collections to find something you love!</p>
+        <a href="{{ url_for('index') }}" class="btn btn-primary">Continue Shopping</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
